@@ -1,0 +1,654 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 60;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		000000000000000000000022 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000000000001 /* ContentView.swift */; };
+		000000000000000000000023 /* WorkoutTrackerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000000000002 /* WorkoutTrackerApp.swift */; };
+		000000000000000000000024 /* EmailWorkoutParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000000000003 /* EmailWorkoutParser.swift */; };
+		000000000000000000000025 /* PlateCalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000000000004 /* PlateCalculator.swift */; };
+		000000000000000000000026 /* SetRepParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000000000005 /* SetRepParser.swift */; };
+		000000000000000000000027 /* Exercise.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000000000006 /* Exercise.swift */; };
+		000000000000000000000028 /* GymProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000000000007 /* GymProfile.swift */; };
+		000000000000000000000029 /* WorkoutDay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000000000008 /* WorkoutDay.swift */; };
+		00000000000000000000002A /* WorkoutExercise.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000000000009 /* WorkoutExercise.swift */; };
+		00000000000000000000002B /* WorkoutSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00000000000000000000000A /* WorkoutSet.swift */; };
+		00000000000000000000002C /* EmailWorkoutSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00000000000000000000000B /* EmailWorkoutSource.swift */; };
+		00000000000000000000002D /* GmailService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00000000000000000000000C /* GmailService.swift */; };
+		00000000000000000000002E /* GoogleAuthProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00000000000000000000000D /* GoogleAuthProvider.swift */; };
+		00000000000000000000002F /* MockWorkoutSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00000000000000000000000E /* MockWorkoutSource.swift */; };
+		000000000000000000000030 /* WorkoutImporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00000000000000000000000F /* WorkoutImporter.swift */; };
+		000000000000000000000031 /* WorkoutSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000000000010 /* WorkoutSource.swift */; };
+		000000000000000000000032 /* ServiceFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000000000011 /* ServiceFactory.swift */; };
+		000000000000000000000033 /* KeychainHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000000000012 /* KeychainHelper.swift */; };
+		000000000000000000000034 /* TrueCoachAPIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000000000013 /* TrueCoachAPIClient.swift */; };
+		000000000000000000000035 /* TrueCoachDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000000000014 /* TrueCoachDTO.swift */; };
+		000000000000000000000036 /* WeightSuggestionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000000000015 /* WeightSuggestionService.swift */; };
+		000000000000000000000037 /* PlateCalculatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000000000016 /* PlateCalculatorView.swift */; };
+		000000000000000000000038 /* ExerciseDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000000000017 /* ExerciseDetailView.swift */; };
+		000000000000000000000039 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000000000018 /* SettingsView.swift */; };
+		00000000000000000000003A /* TodayWorkoutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000000000019 /* TodayWorkoutView.swift */; };
+		00000000000000000000003B /* PasteWorkoutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00000000000000000000001A /* PasteWorkoutView.swift */; };
+		00000000000000000000003C /* EmailWorkoutParserTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00000000000000000000001B /* EmailWorkoutParserTests.swift */; };
+		00000000000000000000003D /* PlateCalculatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00000000000000000000001C /* PlateCalculatorTests.swift */; };
+		00000000000000000000003E /* SetRepParserTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00000000000000000000001D /* SetRepParserTests.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		000000000000000000000058 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 00000000000000000000005A /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 000000000000000000000056;
+			remoteInfo = WorkoutTracker;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		000000000000000000000001 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		000000000000000000000002 /* WorkoutTrackerApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutTrackerApp.swift; sourceTree = "<group>"; };
+		000000000000000000000003 /* EmailWorkoutParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmailWorkoutParser.swift; sourceTree = "<group>"; };
+		000000000000000000000004 /* PlateCalculator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlateCalculator.swift; sourceTree = "<group>"; };
+		000000000000000000000005 /* SetRepParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetRepParser.swift; sourceTree = "<group>"; };
+		000000000000000000000006 /* Exercise.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Exercise.swift; sourceTree = "<group>"; };
+		000000000000000000000007 /* GymProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GymProfile.swift; sourceTree = "<group>"; };
+		000000000000000000000008 /* WorkoutDay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutDay.swift; sourceTree = "<group>"; };
+		000000000000000000000009 /* WorkoutExercise.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutExercise.swift; sourceTree = "<group>"; };
+		00000000000000000000000A /* WorkoutSet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutSet.swift; sourceTree = "<group>"; };
+		00000000000000000000000B /* EmailWorkoutSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmailWorkoutSource.swift; sourceTree = "<group>"; };
+		00000000000000000000000C /* GmailService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GmailService.swift; sourceTree = "<group>"; };
+		00000000000000000000000D /* GoogleAuthProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoogleAuthProvider.swift; sourceTree = "<group>"; };
+		00000000000000000000000E /* MockWorkoutSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockWorkoutSource.swift; sourceTree = "<group>"; };
+		00000000000000000000000F /* WorkoutImporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutImporter.swift; sourceTree = "<group>"; };
+		000000000000000000000010 /* WorkoutSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutSource.swift; sourceTree = "<group>"; };
+		000000000000000000000011 /* ServiceFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceFactory.swift; sourceTree = "<group>"; };
+		000000000000000000000012 /* KeychainHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainHelper.swift; sourceTree = "<group>"; };
+		000000000000000000000013 /* TrueCoachAPIClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrueCoachAPIClient.swift; sourceTree = "<group>"; };
+		000000000000000000000014 /* TrueCoachDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrueCoachDTO.swift; sourceTree = "<group>"; };
+		000000000000000000000015 /* WeightSuggestionService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeightSuggestionService.swift; sourceTree = "<group>"; };
+		000000000000000000000016 /* PlateCalculatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlateCalculatorView.swift; sourceTree = "<group>"; };
+		000000000000000000000017 /* ExerciseDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseDetailView.swift; sourceTree = "<group>"; };
+		000000000000000000000018 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		000000000000000000000019 /* TodayWorkoutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodayWorkoutView.swift; sourceTree = "<group>"; };
+		00000000000000000000001A /* PasteWorkoutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasteWorkoutView.swift; sourceTree = "<group>"; };
+		00000000000000000000001B /* EmailWorkoutParserTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmailWorkoutParserTests.swift; sourceTree = "<group>"; };
+		00000000000000000000001C /* PlateCalculatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlateCalculatorTests.swift; sourceTree = "<group>"; };
+		00000000000000000000001D /* SetRepParserTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetRepParserTests.swift; sourceTree = "<group>"; };
+		00000000000000000000001E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = Info.plist; path = WorkoutApp/Info.plist; sourceTree = "<group>"; };
+		00000000000000000000001F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = Info.plist; path = WorkoutAppTests/Info.plist; sourceTree = "<group>"; };
+		000000000000000000000020 /* WorkoutTracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WorkoutTracker.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		000000000000000000000021 /* WorkoutTrackerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = WorkoutTrackerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		000000000000000000000051 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		000000000000000000000054 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		00000000000000000000003F = {
+			isa = PBXGroup;
+			children = (
+				000000000000000000000040 /* WorkoutTracker */,
+				000000000000000000000041 /* Frameworks */,
+				000000000000000000000042 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		000000000000000000000040 /* WorkoutTracker */ = {
+			isa = PBXGroup;
+			children = (
+				000000000000000000000043 /* App */,
+				000000000000000000000044 /* Logic */,
+				000000000000000000000045 /* Models */,
+				000000000000000000000046 /* Services */,
+				00000000000000000000004A /* Views */,
+				00000000000000000000001E /* Info.plist */,
+				00000000000000000000004F /* WorkoutAppTests */,
+			);
+			name = WorkoutTracker;
+			sourceTree = "<group>";
+		};
+		000000000000000000000041 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		000000000000000000000042 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				000000000000000000000020 /* WorkoutTracker.app */,
+				000000000000000000000021 /* WorkoutTrackerTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		000000000000000000000043 /* App */ = {
+			isa = PBXGroup;
+			children = (
+				000000000000000000000001 /* ContentView.swift */,
+				000000000000000000000002 /* WorkoutTrackerApp.swift */,
+			);
+			name = App;
+			path = WorkoutApp/App;
+			sourceTree = "<group>";
+		};
+		000000000000000000000044 /* Logic */ = {
+			isa = PBXGroup;
+			children = (
+				000000000000000000000003 /* EmailWorkoutParser.swift */,
+				000000000000000000000004 /* PlateCalculator.swift */,
+				000000000000000000000005 /* SetRepParser.swift */,
+			);
+			name = Logic;
+			path = WorkoutApp/Logic;
+			sourceTree = "<group>";
+		};
+		000000000000000000000045 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				000000000000000000000006 /* Exercise.swift */,
+				000000000000000000000007 /* GymProfile.swift */,
+				000000000000000000000008 /* WorkoutDay.swift */,
+				000000000000000000000009 /* WorkoutExercise.swift */,
+				00000000000000000000000A /* WorkoutSet.swift */,
+			);
+			name = Models;
+			path = WorkoutApp/Models;
+			sourceTree = "<group>";
+		};
+		000000000000000000000046 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				000000000000000000000047 /* Email */,
+				000000000000000000000048 /* Import */,
+				000000000000000000000049 /* TrueCoach */,
+				000000000000000000000011 /* ServiceFactory.swift */,
+				000000000000000000000015 /* WeightSuggestionService.swift */,
+			);
+			name = Services;
+			path = WorkoutApp/Services;
+			sourceTree = "<group>";
+		};
+		000000000000000000000047 /* Email */ = {
+			isa = PBXGroup;
+			children = (
+				00000000000000000000000B /* EmailWorkoutSource.swift */,
+				00000000000000000000000C /* GmailService.swift */,
+				00000000000000000000000D /* GoogleAuthProvider.swift */,
+			);
+			name = Email;
+			path = Email;
+			sourceTree = "<group>";
+		};
+		000000000000000000000048 /* Import */ = {
+			isa = PBXGroup;
+			children = (
+				00000000000000000000000E /* MockWorkoutSource.swift */,
+				00000000000000000000000F /* WorkoutImporter.swift */,
+				000000000000000000000010 /* WorkoutSource.swift */,
+			);
+			name = Import;
+			path = Import;
+			sourceTree = "<group>";
+		};
+		000000000000000000000049 /* TrueCoach */ = {
+			isa = PBXGroup;
+			children = (
+				000000000000000000000012 /* KeychainHelper.swift */,
+				000000000000000000000013 /* TrueCoachAPIClient.swift */,
+				000000000000000000000014 /* TrueCoachDTO.swift */,
+			);
+			name = TrueCoach;
+			path = TrueCoach;
+			sourceTree = "<group>";
+		};
+		00000000000000000000004A /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				00000000000000000000004B /* Calculator */,
+				00000000000000000000004C /* Exercise */,
+				00000000000000000000004D /* Settings */,
+				00000000000000000000004E /* Today */,
+			);
+			name = Views;
+			sourceTree = "<group>";
+		};
+		00000000000000000000004B /* Calculator */ = {
+			isa = PBXGroup;
+			children = (
+				000000000000000000000016 /* PlateCalculatorView.swift */,
+			);
+			name = Calculator;
+			path = WorkoutApp/Views/Calculator;
+			sourceTree = "<group>";
+		};
+		00000000000000000000004C /* Exercise */ = {
+			isa = PBXGroup;
+			children = (
+				000000000000000000000017 /* ExerciseDetailView.swift */,
+			);
+			name = Exercise;
+			path = WorkoutApp/Views/Exercise;
+			sourceTree = "<group>";
+		};
+		00000000000000000000004D /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				000000000000000000000018 /* SettingsView.swift */,
+			);
+			name = Settings;
+			path = WorkoutApp/Views/Settings;
+			sourceTree = "<group>";
+		};
+		00000000000000000000004E /* Today */ = {
+			isa = PBXGroup;
+			children = (
+				000000000000000000000019 /* TodayWorkoutView.swift */,
+				00000000000000000000001A /* PasteWorkoutView.swift */,
+			);
+			name = Today;
+			path = WorkoutApp/Views/Today;
+			sourceTree = "<group>";
+		};
+		00000000000000000000004F /* WorkoutAppTests */ = {
+			isa = PBXGroup;
+			children = (
+				00000000000000000000001B /* EmailWorkoutParserTests.swift */,
+				00000000000000000000001C /* PlateCalculatorTests.swift */,
+				00000000000000000000001D /* SetRepParserTests.swift */,
+				00000000000000000000001F /* Info.plist */,
+			);
+			path = WorkoutAppTests;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		000000000000000000000056 /* WorkoutTracker */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 000000000000000000000062 /* Build configuration list for PBXNativeTarget "WorkoutTracker" */;
+			buildPhases = (
+				000000000000000000000050 /* Sources */,
+				000000000000000000000051 /* Frameworks */,
+				000000000000000000000052 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = WorkoutTracker;
+			productName = WorkoutTracker;
+			productReference = 000000000000000000000020 /* WorkoutTracker.app */;
+			productType = "com.apple.product-type.application";
+		};
+		000000000000000000000057 /* WorkoutTrackerTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 000000000000000000000063 /* Build configuration list for PBXNativeTarget "WorkoutTrackerTests" */;
+			buildPhases = (
+				000000000000000000000053 /* Sources */,
+				000000000000000000000054 /* Frameworks */,
+				000000000000000000000055 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				000000000000000000000059 /* PBXTargetDependency */,
+			);
+			name = WorkoutTrackerTests;
+			productName = WorkoutTrackerTests;
+			productReference = 000000000000000000000021 /* WorkoutTrackerTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		00000000000000000000005A /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastUpgradeCheck = 2700;
+				TargetAttributes = {
+					000000000000000000000056 = {
+						CreatedOnToolsVersion = 17.0;
+					};
+					000000000000000000000057 = {
+						CreatedOnToolsVersion = 17.0;
+						TestTargetID = WorkoutTracker;
+					};
+				};
+			};
+			buildConfigurationList = 000000000000000000000061 /* Build configuration list for PBXProject "WorkoutTracker" */;
+			compatibilityVersion = "Xcode 15.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 00000000000000000000003F;
+			productRefGroup = 000000000000000000000042 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				000000000000000000000056 /* WorkoutTracker */,
+				000000000000000000000057 /* WorkoutTrackerTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		000000000000000000000052 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		000000000000000000000055 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		000000000000000000000050 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				000000000000000000000022 /* ContentView.swift in Sources */,
+				000000000000000000000023 /* WorkoutTrackerApp.swift in Sources */,
+				000000000000000000000024 /* EmailWorkoutParser.swift in Sources */,
+				000000000000000000000025 /* PlateCalculator.swift in Sources */,
+				000000000000000000000026 /* SetRepParser.swift in Sources */,
+				000000000000000000000027 /* Exercise.swift in Sources */,
+				000000000000000000000028 /* GymProfile.swift in Sources */,
+				000000000000000000000029 /* WorkoutDay.swift in Sources */,
+				00000000000000000000002A /* WorkoutExercise.swift in Sources */,
+				00000000000000000000002B /* WorkoutSet.swift in Sources */,
+				00000000000000000000002C /* EmailWorkoutSource.swift in Sources */,
+				00000000000000000000002D /* GmailService.swift in Sources */,
+				00000000000000000000002E /* GoogleAuthProvider.swift in Sources */,
+				00000000000000000000002F /* MockWorkoutSource.swift in Sources */,
+				000000000000000000000030 /* WorkoutImporter.swift in Sources */,
+				000000000000000000000031 /* WorkoutSource.swift in Sources */,
+				000000000000000000000032 /* ServiceFactory.swift in Sources */,
+				000000000000000000000033 /* KeychainHelper.swift in Sources */,
+				000000000000000000000034 /* TrueCoachAPIClient.swift in Sources */,
+				000000000000000000000035 /* TrueCoachDTO.swift in Sources */,
+				000000000000000000000036 /* WeightSuggestionService.swift in Sources */,
+				000000000000000000000037 /* PlateCalculatorView.swift in Sources */,
+				000000000000000000000038 /* ExerciseDetailView.swift in Sources */,
+				000000000000000000000039 /* SettingsView.swift in Sources */,
+				00000000000000000000003A /* TodayWorkoutView.swift in Sources */,
+				00000000000000000000003B /* PasteWorkoutView.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		000000000000000000000053 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				00000000000000000000003C /* EmailWorkoutParserTests.swift in Sources */,
+				00000000000000000000003D /* PlateCalculatorTests.swift in Sources */,
+				00000000000000000000003E /* SetRepParserTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		000000000000000000000059 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 000000000000000000000056 /* WorkoutTracker */;
+			targetProxy = 000000000000000000000058 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		00000000000000000000005B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = YES;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MARKETING_VERSION = 0.1.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_COMPILATION_MODE = singlefile;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		00000000000000000000005C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MARKETING_VERSION = 0.1.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		00000000000000000000005D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_PREVIEWS = YES;
+				INFOPLIST_FILE = WorkoutApp/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 0.1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.victor.workouttracker;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		00000000000000000000005E /* Release */ = {
+				isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_PREVIEWS = YES;
+				INFOPLIST_FILE = WorkoutApp/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 0.1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.victor.workouttracker;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		00000000000000000000005F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				INFOPLIST_FILE = WorkoutAppTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.victor.workouttracker.tests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/WorkoutTracker.app/WorkoutTracker";
+			};
+			name = Debug;
+		};
+		000000000000000000000060 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				INFOPLIST_FILE = WorkoutAppTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.victor.workouttracker.tests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/WorkoutTracker.app/WorkoutTracker";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		000000000000000000000061 /* Build configuration list for PBXProject "WorkoutTracker" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				00000000000000000000005B /* Debug */,
+				00000000000000000000005C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		000000000000000000000062 /* Build configuration list for PBXNativeTarget "WorkoutTracker" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				00000000000000000000005D /* Debug */,
+				00000000000000000000005E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		000000000000000000000063 /* Build configuration list for PBXNativeTarget "WorkoutTrackerTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				00000000000000000000005F /* Debug */,
+				000000000000000000000060 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 00000000000000000000005A /* Project object */;
+}
