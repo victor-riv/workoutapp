@@ -10,6 +10,11 @@ struct TodayWorkoutView: View {
 
     @State private var showingPaste = false
     @State private var showingDeleteConfirm = false
+    @State private var selectedDay: Int?
+    @State private var showingBuilder = false
+    @State private var builderInitialDate = Date()
+    @State private var navigatingDay: WorkoutDay?
+    @State private var showingDayDetail = false
 
     private var today: WorkoutDay? {
         days.first { Calendar.current.isDateInToday($0.date) }
@@ -26,6 +31,21 @@ struct TodayWorkoutView: View {
 
     private var daysInMonth: Int {
         Calendar.current.range(of: .day, in: .month, for: Date())?.count ?? 30
+    }
+
+    private var selectedWorkout: WorkoutDay? {
+        guard let selectedDay else { return nil }
+        return days.first {
+            Calendar.current.component(.day, from: $0.date) == selectedDay
+                && Calendar.current.isDate($0.date, equalTo: Date(), toGranularity: .month)
+        }
+    }
+
+    private var selectedDate: Date? {
+        guard let selectedDay else { return nil }
+        var components = Calendar.current.dateComponents([.year, .month], from: Date())
+        components.day = selectedDay
+        return Calendar.current.date(from: components)
     }
 
     private var weekdayText: String {
@@ -62,6 +82,24 @@ struct TodayWorkoutView: View {
             .toolbar(.hidden, for: .navigationBar)
             .sheet(isPresented: $showingPaste) {
                 PasteWorkoutView()
+            }
+            .sheet(isPresented: $showingBuilder) {
+                WorkoutBuilderView(initialDate: builderInitialDate)
+            }
+            .navigationDestination(isPresented: $showingDayDetail) {
+                if let day = navigatingDay {
+                    HistoryDayView(day: day)
+                }
+            }
+            .onChange(of: selectedDay) { _, _ in
+                if let workout = selectedWorkout {
+                    navigatingDay = workout
+                    showingDayDetail = true
+                } else if let date = selectedDate {
+                    builderInitialDate = date
+                    showingBuilder = true
+                }
+                selectedDay = nil
             }
             .alert("Delete Workout?", isPresented: $showingDeleteConfirm) {
                 Button("Delete", role: .destructive) {
@@ -128,6 +166,7 @@ struct TodayWorkoutView: View {
             MonthCalendarView(
                 month: Date(),
                 markedDays: monthMarkedDays,
+                selection: $selectedDay,
                 showTodayRing: true
             )
         }

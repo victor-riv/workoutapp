@@ -1,5 +1,6 @@
 import SwiftUI
 import SwiftData
+import UIKit
 
 /// Set-by-set logging for one exercise. Weight fields come pre-filled with
 /// the last-used weight; the user just adjusts and ticks sets off.
@@ -35,6 +36,14 @@ struct ExerciseDetailView: View {
         // Prefer a weight already typed into a set, else the coach's prescription.
         workoutExercise.sortedSets.compactMap(\.weight).first
             ?? workoutExercise.prescribedWeight
+    }
+
+    /// Drops the keyboard when the user taps outside a text field.
+    private func hideKeyboard() {
+        UIApplication.shared.sendAction(
+            #selector(UIResponder.resignFirstResponder),
+            to: nil, from: nil, for: nil
+        )
     }
 
     var body: some View {
@@ -95,6 +104,10 @@ struct ExerciseDetailView: View {
         .workoutTabStyle()
         .navigationTitle("")
         .navigationBarTitleDisplayMode(.inline)
+        .onTapGesture {
+            // Tapping outside a field drops the keyboard.
+            hideKeyboard()
+        }
         .sheet(isPresented: $showingPlates) {
             NavigationStack {
                 PlateCalculatorView(presetTarget: platesPreset)
