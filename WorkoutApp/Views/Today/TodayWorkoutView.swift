@@ -8,7 +8,6 @@ struct TodayWorkoutView: View {
     @Environment(\.modelContext) private var context
     @Query(sort: \WorkoutDay.date, order: .reverse) private var days: [WorkoutDay]
 
-    @State private var showingPaste = false
     @State private var showingDeleteConfirm = false
     @State private var selectedDay: Int?
     @State private var showingBuilder = false
@@ -80,9 +79,6 @@ struct TodayWorkoutView: View {
             }
             .workoutTabStyle()
             .toolbar(.hidden, for: .navigationBar)
-            .sheet(isPresented: $showingPaste) {
-                PasteWorkoutView()
-            }
             .sheet(isPresented: $showingBuilder) {
                 WorkoutBuilderView(initialDate: builderInitialDate)
             }
@@ -131,9 +127,10 @@ struct TodayWorkoutView: View {
             Spacer()
             Menu {
                 Button {
-                    showingPaste = true
+                    builderInitialDate = Calendar.current.startOfDay(for: Date())
+                    showingBuilder = true
                 } label: {
-                    Label("Paste Workout", systemImage: "doc.on.clipboard")
+                    Label("New Workout", systemImage: "plus")
                 }
                 if today != nil {
                     Button(role: .destructive) {
@@ -201,13 +198,14 @@ struct TodayWorkoutView: View {
                 .foregroundStyle(.white)
                 .textCase(.uppercase)
                 .tracking(-0.5)
-            Text("No workout yet. Paste today's workout to get started.")
+            Text("No workout yet. Create today's workout to get started.")
                 .font(.body)
                 .foregroundStyle(WorkoutTheme.grayText)
             Button {
-                showingPaste = true
+                builderInitialDate = Calendar.current.startOfDay(for: Date())
+                showingBuilder = true
             } label: {
-                Text("Paste Workout")
+                Text("Create Workout")
             }
             .buttonStyle(.lime)
             .padding(.top, 4)

@@ -1,9 +1,11 @@
 import SwiftUI
+import SwiftData
 
 /// Floating rounded tab bar in the app's theme: traditional icon + label
 /// tabs inside a floating card, lime for the active tab, with a centered
 /// lime + button that opens the workout builder from anywhere.
 struct ContentView: View {
+    @Environment(\.modelContext) private var context
     @State private var selectedTab: Tab = .today
     @State private var showingBuilder = false
     @State private var builderDate = Date()
@@ -41,6 +43,12 @@ struct ContentView: View {
             .workoutTabStyle()
             .sheet(isPresented: $showingBuilder) {
                 WorkoutBuilderView(initialDate: builderDate)
+            }
+            .task {
+                let result = SeedWorkouts.importIfNeeded(into: context)
+                if result.days > 0 {
+                    try? context.save()
+                }
             }
     }
 

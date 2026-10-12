@@ -113,7 +113,7 @@ enum WorkoutImporter {
         }
     }
 
-    private static func findOrCreateExercise(named name: String, in context: ModelContext) -> Exercise {
+    static func findOrCreateExercise(named name: String, in context: ModelContext) -> Exercise {
         let normalized = Exercise.normalize(name)
         let descriptor = FetchDescriptor<Exercise>(
             predicate: #Predicate { $0.normalizedName == normalized }

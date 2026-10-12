@@ -1,5 +1,6 @@
 import SwiftUI
 import SwiftData
+import PhotosUI
 struct WorkoutBuilderView: View {
 @Environment(\.modelContext) private var context
 @Environment(\.dismiss) private var dismiss
@@ -12,6 +13,10 @@ private let editingSourceID: String?
 @State private var pastedText = ""
 @State private var parseError: String?
 @State private var exerciseSheet: ExerciseSheetState?
+@State private var selectedPhoto: PhotosPickerItem?
+@State private var isScanning = false
+@State private var activeImportMethod: ImportMethod?
+private enum ImportMethod { case paste, scan }
 struct BuilderExercise: Identifiable {
 let id = UUID(); var name: String; var targetSets: Int; var targetReps: String; var prescribedWeight: Double?; var coachNotes: String
 }
@@ -50,21 +55,37 @@ if !isEditing { Image(systemName: "chevron.right").font(.caption).foregroundStyl
 }.padding(16).background(WorkoutTheme.card).clipShape(RoundedRectangle(cornerRadius: 20))
 }.buttonStyle(.plain).disabled(isEditing)
 HStack(spacing: 12) {
-Button { withAnimation { showingPaste.toggle() } } label: {
+Button { withAnimation { showingPaste.toggle(); if showingPaste { activeImportMethod = .paste } } } label: {
 VStack(spacing: 6) {
 Image(systemName: "doc.on.clipboard").font(.title2).foregroundStyle(WorkoutTheme.lime)
-Text("Paste workout").font(.subheadline.weight(.semibold)).foregroundStyle(.white)
-Text("From coach text").font(.caption).foregroundStyle(WorkoutTheme.grayText)
-}.frame(maxWidth: .infinity).padding(.vertical, 18).background(WorkoutTheme.card).clipShape(RoundedRectangle(cornerRadius: 20))
-.overlay { if showingPaste { RoundedRectangle(cornerRadius: 20).stroke(WorkoutTheme.lime, lineWidth: 1.5) } }
+Text("Paste").font(.subheadline.weight(.semibold)).foregroundStyle(.white)
+Text("From coach text").font(.caption).foregroundStyle(WorkoutTheme.grayText).lineLimit(1).minimumScaleFactor(0.8)
+}.frame(maxWidth: .infinity, minHeight: 108).background(WorkoutTheme.card).clipShape(RoundedRectangle(cornerRadius: 20))
+.overlay { if showingPaste && activeImportMethod == .paste { RoundedRectangle(cornerRadius: 20).stroke(WorkoutTheme.lime, lineWidth: 1.5) } }
 }.buttonStyle(.plain)
+PhotosPicker(selection: $selectedPhoto, matching: .images) {
+VStack(spacing: 6) {
+if isScanning {
+ProgressView().tint(WorkoutTheme.lime)
+} else {
+Image(systemName: "text.viewfinder").font(.title2).foregroundStyle(WorkoutTheme.lime)
+}
+Text("Scan").font(.subheadline.weight(.semibold)).foregroundStyle(.white)
+Text("From screenshot").font(.caption).foregroundStyle(WorkoutTheme.grayText).lineLimit(1).minimumScaleFactor(0.8)
+}.frame(maxWidth: .infinity, minHeight: 108).background(WorkoutTheme.card).clipShape(RoundedRectangle(cornerRadius: 20))
+.overlay { if showingPaste && activeImportMethod == .scan { RoundedRectangle(cornerRadius: 20).stroke(WorkoutTheme.lime, lineWidth: 1.5) } }
+}.buttonStyle(.plain).disabled(isScanning)
 Button { exerciseSheet = .add } label: {
 VStack(spacing: 6) {
 Image(systemName: "plus").font(.title2).foregroundStyle(WorkoutTheme.lime)
-Text("Add exercise").font(.subheadline.weight(.semibold)).foregroundStyle(.white)
-Text("Build manually").font(.caption).foregroundStyle(WorkoutTheme.grayText)
-}.frame(maxWidth: .infinity).padding(.vertical, 18).background(WorkoutTheme.card).clipShape(RoundedRectangle(cornerRadius: 20))
+Text("Add").font(.subheadline.weight(.semibold)).foregroundStyle(.white)
+Text("Build manually").font(.caption).foregroundStyle(WorkoutTheme.grayText).lineLimit(1).minimumScaleFactor(0.8)
+}.frame(maxWidth: .infinity, minHeight: 108).background(WorkoutTheme.card).clipShape(RoundedRectangle(cornerRadius: 20))
 }.buttonStyle(.plain)
+}
+.onChange(of: selectedPhoto) { _, newPhoto in
+guard let newPhoto else { return }
+Task { await scanPhoto(newPhoto) }
 }
 if showingPaste {
 VStack(alignment: .leading, spacing: 12) {
@@ -96,7 +117,9 @@ Image(systemName: "chevron.right").font(.caption).foregroundStyle(WorkoutTheme.g
 .listStyle(.plain).scrollContentBackground(.hidden).scrollDisabled(true).frame(height: CGFloat(exercises.count) * 92)
 }
 }
-Button(isEditing ? "Save Changes" : "Save Workout") { save() }.buttonStyle(.lime).disabled(exercises.isEmpty).frame(maxWidth: .infinity)
+if !exercises.isEmpty {
+Button(isEditing ? "Save Changes" : "Save Workout") { save() }.buttonStyle(.lime).frame(maxWidth: .infinity)
+}
 }
 .padding(.horizontal, 20).padding(.vertical, 12)
 }
@@ -131,6 +154,21 @@ if let index = exercises.firstIndex(where: { $0.id == exercise.id }) { exercises
 }
 private func formattedDate(_ date: Date) -> String {
 let formatter = DateFormatter(); formatter.dateFormat = "EEEE, MMM d"; return formatter.string(from: date)
+}
+private func scanPhoto(_ item: PhotosPickerItem) async {
+isScanning = true
+defer { isScanning = false; selectedPhoto = nil }
+guard let data = try? await item.loadTransferable(type: Data.self),
+let image = UIImage(data: data),
+let text = await WorkoutTextRecognizer.recognizeText(in: image) else {
+parseError = "Couldn't read any text from that image. Try a clearer screenshot."
+withAnimation { showingPaste = true }
+return
+}
+pastedText = text
+parseError = nil
+activeImportMethod = .scan
+withAnimation { showingPaste = true }
 }
 private func importPasted() {
 parseError = nil

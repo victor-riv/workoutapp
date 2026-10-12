@@ -2,10 +2,6 @@ import SwiftUI
 import SwiftData
 
 /// The gym profile (bar, collars, plate inventory).
-///
-/// The Gmail auto-import UI used to live here; it was removed when the app
-/// went paste-first. The dormant Gmail code remains under
-/// `WorkoutApp/Services/Email/` for a possible future upgrade.
 struct SettingsView: View {
     @Environment(\.modelContext) private var context
     @Query private var profiles: [GymProfile]
@@ -51,7 +47,6 @@ struct SettingsView: View {
                     set: { profile.collarPairWeight = $0 ? (profile.unit == .lb ? 5 : 2.5) : 0 }
                 ))
             }
-
             Section {
                 ForEach(inventory.indices, id: \.self) { index in
                     HStack {

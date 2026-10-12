@@ -44,6 +44,9 @@
 		000000000000000000000074 /* WorkoutBuilderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000000000072 /* WorkoutBuilderView.swift */; };
 		000000000000000000000075 /* StatsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000000000073 /* StatsView.swift */; };
 		000000000000000000000079 /* ExerciseLibrary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000000000078 /* ExerciseLibrary.swift */; };
+		000000000000000000000081 /* WorkoutTextRecognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000000000080 /* WorkoutTextRecognizer.swift */; };
+		000000000000000000000083 /* CSVWorkoutImporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000000000082 /* CSVWorkoutImporter.swift */; };
+		000000000000000000000085 /* SeedWorkouts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000000000084 /* SeedWorkouts.swift */; };
 		00000000000000000000006F /* BodyPartTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000000000069 /* BodyPartTests.swift */; };
 /* End PBXBuildFile section */
 
@@ -99,6 +102,9 @@
 		000000000000000000000072 /* WorkoutBuilderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutBuilderView.swift; sourceTree = "<group>"; };
 		000000000000000000000073 /* StatsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatsView.swift; sourceTree = "<group>"; };
 		000000000000000000000078 /* ExerciseLibrary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseLibrary.swift; sourceTree = "<group>"; };
+		000000000000000000000080 /* WorkoutTextRecognizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutTextRecognizer.swift; sourceTree = "<group>"; };
+		000000000000000000000082 /* CSVWorkoutImporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CSVWorkoutImporter.swift; sourceTree = "<group>"; };
+		000000000000000000000084 /* SeedWorkouts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeedWorkouts.swift; sourceTree = "<group>"; };
 		000000000000000000000069 /* BodyPartTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BodyPartTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -202,6 +208,7 @@
 				000000000000000000000049 /* TrueCoach */,
 				000000000000000000000011 /* ServiceFactory.swift */,
 				000000000000000000000015 /* WeightSuggestionService.swift */,
+				000000000000000000000080 /* WorkoutTextRecognizer.swift */,
 			);
 			name = Services;
 			path = WorkoutApp/Services;
@@ -223,6 +230,8 @@
 				00000000000000000000000E /* MockWorkoutSource.swift */,
 				00000000000000000000000F /* WorkoutImporter.swift */,
 				000000000000000000000010 /* WorkoutSource.swift */,
+				000000000000000000000082 /* CSVWorkoutImporter.swift */,
+				000000000000000000000084 /* SeedWorkouts.swift */,
 			);
 			path = Import;
 			sourceTree = "<group>";
@@ -471,6 +480,9 @@
 				000000000000000000000074 /* WorkoutBuilderView.swift in Sources */,
 				000000000000000000000075 /* StatsView.swift in Sources */,
 				000000000000000000000079 /* ExerciseLibrary.swift in Sources */,
+				000000000000000000000081 /* WorkoutTextRecognizer.swift in Sources */,
+				000000000000000000000083 /* CSVWorkoutImporter.swift in Sources */,
+				000000000000000000000085 /* SeedWorkouts.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
