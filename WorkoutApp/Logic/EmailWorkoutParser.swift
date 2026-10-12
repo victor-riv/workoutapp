@@ -310,12 +310,16 @@ enum EmailWorkoutParser {
     }
 
     /// Lines that end the exercise section: nutrition block, sign-off, footer.
+    ///
+    /// Note: the TrueCoach template also uses "| ..." lines in the *header*
+    /// boilerplate ("| You've received a workout. |"), so a bare "| " prefix
+    /// must NOT be treated as the footer — those lines are simply ignored
+    /// as header boilerplate before the first exercise label.
     private static func isFooterStart(_ line: String) -> Bool {
         line == "**"
             || line.lowercased() == "nutrition"
             || line.hasPrefix("- Your Coach,")
             || line.hasPrefix("[Open in TrueCoach]")
-            || line.hasPrefix("| ")
     }
 
     private static func parseNutrition(from body: String) -> ParsedNutrition? {

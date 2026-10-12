@@ -28,9 +28,9 @@ public enum SetRepParser {
             return (1, match[0])
         }
 
-        // "4x8", "4 x 8-10", "3 x 10/side", "3 x 10/ea", "5×5 @ RPE 8"
+        // "4x8", "4 x 8-10", "3 x 10/side", "3 x 10/ea", "3 x 30s", "5×5 @ RPE 8"
         // (firstMatch returns capture groups only, so group 1 is match[0])
-        if let match = firstMatch(pattern: #"(?i)(\d+)\s*[x×]\s*(\d+(?:\s*-\s*\d+)?(?:\s*/\s*(?:side|leg|arm|each|ea))?|amrap)"#, in: trimmed),
+        if let match = firstMatch(pattern: #"(?i)(\d+)\s*[x×]\s*(\d+(?:\s*s(?:ec(?:ond)?s?)?)?(?:\s*-\s*\d+)?(?:\s*/\s*(?:side|leg|arm|each|ea))?|amrap)"#, in: trimmed),
            let sets = Int(match[0]) {
             return (sets, canonicalReps(match[1]))
         }

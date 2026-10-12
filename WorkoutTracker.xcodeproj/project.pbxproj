@@ -33,6 +33,12 @@
 		000000000000000000000039 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000000000018 /* SettingsView.swift */; };
 		00000000000000000000003A /* TodayWorkoutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000000000019 /* TodayWorkoutView.swift */; };
 		00000000000000000000003B /* PasteWorkoutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00000000000000000000001A /* PasteWorkoutView.swift */; };
+		00000000000000000000006A /* BodyPart.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000000000064 /* BodyPart.swift */; };
+		00000000000000000000006B /* WorkoutTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000000000065 /* WorkoutTheme.swift */; };
+		00000000000000000000006C /* MonthCalendarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000000000066 /* MonthCalendarView.swift */; };
+		00000000000000000000006D /* HistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000000000067 /* HistoryView.swift */; };
+		00000000000000000000006E /* HistoryDayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000000000068 /* HistoryDayView.swift */; };
+		00000000000000000000006F /* BodyPartTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000000000069 /* BodyPartTests.swift */; };
 		00000000000000000000003C /* EmailWorkoutParserTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00000000000000000000001B /* EmailWorkoutParserTests.swift */; };
 		00000000000000000000003D /* PlateCalculatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00000000000000000000001C /* PlateCalculatorTests.swift */; };
 		00000000000000000000003E /* SetRepParserTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00000000000000000000001D /* SetRepParserTests.swift */; };
@@ -78,6 +84,12 @@
 		00000000000000000000001B /* EmailWorkoutParserTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmailWorkoutParserTests.swift; sourceTree = "<group>"; };
 		00000000000000000000001C /* PlateCalculatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlateCalculatorTests.swift; sourceTree = "<group>"; };
 		00000000000000000000001D /* SetRepParserTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetRepParserTests.swift; sourceTree = "<group>"; };
+		000000000000000000000064 /* BodyPart.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BodyPart.swift; sourceTree = "<group>"; };
+		000000000000000000000065 /* WorkoutTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutTheme.swift; sourceTree = "<group>"; };
+		000000000000000000000066 /* MonthCalendarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonthCalendarView.swift; sourceTree = "<group>"; };
+		000000000000000000000067 /* HistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryView.swift; sourceTree = "<group>"; };
+		000000000000000000000068 /* HistoryDayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryDayView.swift; sourceTree = "<group>"; };
+		000000000000000000000069 /* BodyPartTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BodyPartTests.swift; sourceTree = "<group>"; };
 		00000000000000000000001E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = Info.plist; path = WorkoutApp/Info.plist; sourceTree = "<group>"; };
 		00000000000000000000001F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = Info.plist; path = WorkoutAppTests/Info.plist; sourceTree = "<group>"; };
 		000000000000000000000020 /* WorkoutTracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WorkoutTracker.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -157,6 +169,7 @@
 				000000000000000000000003 /* EmailWorkoutParser.swift */,
 				000000000000000000000004 /* PlateCalculator.swift */,
 				000000000000000000000005 /* SetRepParser.swift */,
+				000000000000000000000064 /* BodyPart.swift */,
 			);
 			name = Logic;
 			path = WorkoutApp/Logic;
@@ -225,7 +238,9 @@
 			isa = PBXGroup;
 			children = (
 				00000000000000000000004B /* Calculator */,
+				000000000000000000000070 /* Components */,
 				00000000000000000000004C /* Exercise */,
+				000000000000000000000071 /* History */,
 				00000000000000000000004D /* Settings */,
 				00000000000000000000004E /* Today */,
 			);
@@ -269,12 +284,33 @@
 			path = WorkoutApp/Views/Today;
 			sourceTree = "<group>";
 		};
+		000000000000000000000070 /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				000000000000000000000065 /* WorkoutTheme.swift */,
+				000000000000000000000066 /* MonthCalendarView.swift */,
+			);
+			name = Components;
+			path = WorkoutApp/Views/Components;
+			sourceTree = "<group>";
+		};
+		000000000000000000000071 /* History */ = {
+			isa = PBXGroup;
+			children = (
+				000000000000000000000067 /* HistoryView.swift */,
+				000000000000000000000068 /* HistoryDayView.swift */,
+			);
+			name = History;
+			path = WorkoutApp/Views/History;
+			sourceTree = "<group>";
+		};
 		00000000000000000000004F /* WorkoutAppTests */ = {
 			isa = PBXGroup;
 			children = (
 				00000000000000000000001B /* EmailWorkoutParserTests.swift */,
 				00000000000000000000001C /* PlateCalculatorTests.swift */,
 				00000000000000000000001D /* SetRepParserTests.swift */,
+				000000000000000000000069 /* BodyPartTests.swift */,
 				00000000000000000000001F /* Info.plist */,
 			);
 			path = WorkoutAppTests;
@@ -403,6 +439,11 @@
 				000000000000000000000039 /* SettingsView.swift in Sources */,
 				00000000000000000000003A /* TodayWorkoutView.swift in Sources */,
 				00000000000000000000003B /* PasteWorkoutView.swift in Sources */,
+				00000000000000000000006A /* BodyPart.swift in Sources */,
+				00000000000000000000006B /* WorkoutTheme.swift in Sources */,
+				00000000000000000000006C /* MonthCalendarView.swift in Sources */,
+				00000000000000000000006D /* HistoryView.swift in Sources */,
+				00000000000000000000006E /* HistoryDayView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -413,6 +454,7 @@
 				00000000000000000000003C /* EmailWorkoutParserTests.swift in Sources */,
 				00000000000000000000003D /* PlateCalculatorTests.swift in Sources */,
 				00000000000000000000003E /* SetRepParserTests.swift in Sources */,
+				00000000000000000000006F /* BodyPartTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

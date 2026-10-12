@@ -1,14 +1,14 @@
 import SwiftUI
 import SwiftData
 
-/// Paste-first import: copy the TrueCoach workout text and paste it here.
-/// The workout is logged under today's date — no subject, no sign-in,
-/// no Google Cloud project. Pasting again the same day updates the workout.
+/// Paste-first import: copy the workout text and paste it here.
+/// The workout is logged under today's date — no subject, no sign-in.
+/// Pasting again the same day updates the workout.
 struct PasteWorkoutView: View {
     @Environment(\.modelContext) private var context
     @Environment(\.dismiss) private var dismiss
 
-    @State private var emailBody = ""
+    @State private var pastedText = ""
     @State private var preview: ParsedWorkout?
     @State private var parseError: String?
 
@@ -20,18 +20,19 @@ struct PasteWorkoutView: View {
         NavigationStack {
             Form {
                 Section {
-                    TextEditor(text: $emailBody)
+                    TextEditor(text: $pastedText)
                         .frame(minHeight: 280)
                         .font(.body.monospaced())
                 } header: {
                     Text("Workout text")
                 } footer: {
-                    Text("Paste the exercises from your TrueCoach email, starting around the A) / B) lines. It's logged under today.")
+                    Text("Paste the workout text, starting around the A) / B) lines. It's logged under today.")
                 }
 
                 Section {
-                    Button("Parse workout") { parse() }
-                        .disabled(emailBody.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
+                    Button("Import Workout") { importWorkout() }
+                        .buttonStyle(.lime)
+                        .disabled(pastedText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
                 }
 
                 if let preview {
@@ -49,8 +50,8 @@ struct PasteWorkoutView: View {
                     }
 
                     Section {
-                        Button("Save workout") { save(preview) }
-                            .buttonStyle(.borderedProminent)
+                        Button("Save Workout") { save(preview) }
+                            .buttonStyle(.lime)
                     } footer: {
                         Text("Saving again today replaces the workout — your logged sets are kept.")
                     }
@@ -63,7 +64,7 @@ struct PasteWorkoutView: View {
                     }
                 }
             }
-            .navigationTitle("Paste workout")
+            .navigationTitle("Paste Workout")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
@@ -73,12 +74,12 @@ struct PasteWorkoutView: View {
         }
     }
 
-    // MARK: - Parse & save
+    // MARK: - Import & save
 
-    private func parse() {
+    private func importWorkout() {
         parseError = nil
         preview = nil
-        guard let parsed = EmailWorkoutParser.parseMessage(subject: "", body: emailBody) else {
+        guard let parsed = EmailWorkoutParser.parseMessage(subject: "", body: pastedText) else {
             parseError = "Couldn't find a workout in that text. Make sure you pasted the exercises, starting around the A) / B) lines."
             return
         }

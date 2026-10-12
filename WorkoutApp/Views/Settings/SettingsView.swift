@@ -1,16 +1,15 @@
 import SwiftUI
 import SwiftData
 
-/// Gmail import sign-in and the gym profile (bar, collars, plate inventory).
+/// The gym profile (bar, collars, plate inventory).
+///
+/// The Gmail auto-import UI used to live here; it was removed when the app
+/// went paste-first. The dormant Gmail code remains under
+/// `WorkoutApp/Services/Email/` for a possible future upgrade.
 struct SettingsView: View {
     @Environment(\.modelContext) private var context
     @Query private var profiles: [GymProfile]
 
-    @StateObject private var googleAuth = GoogleAuthProvider.shared
-    @State private var isConnecting = false
-    @State private var authMessage: String?
-    @State private var isBackfilling = false
-    @State private var backfillMessage: String?
     @State private var inventory: [PlateDenomination] = []
 
     private var profile: GymProfile? { profiles.first }
@@ -18,104 +17,12 @@ struct SettingsView: View {
     var body: some View {
         NavigationStack {
             Form {
-                gmailSection
                 if let profile {
                     gymSection(profile)
                 }
             }
             .navigationTitle("Settings")
             .task { ensureProfile() }
-        }
-    }
-
-    // MARK: - Gmail import
-
-    private var gmailSection: some View {
-        Section {
-            if ServiceFactory.useMock {
-                Label(
-                    "Developer mode: using mock workout data. Set `ServiceFactory.useMock = false` after the Google OAuth client is configured (see BUILD_CHECKLIST.md).",
-                    systemImage: "hammer"
-                )
-                .font(.footnote)
-                .foregroundStyle(.secondary)
-            } else if googleAuth.isSignedIn {
-                LabeledContent("Gmail account", value: googleAuth.userEmail ?? "")
-                Button {
-                    backfill()
-                } label: {
-                    if isBackfilling {
-                        ProgressView()
-                    } else {
-                        Text("Backfill last 30 days")
-                    }
-                }
-                .disabled(isBackfilling)
-                if let backfillMessage {
-                    Text(backfillMessage)
-                        .font(.footnote)
-                        .foregroundStyle(.secondary)
-                }
-                Button("Disconnect Gmail", role: .destructive) {
-                    googleAuth.signOut()
-                }
-            } else {
-                Button {
-                    connect()
-                } label: {
-                    if isConnecting {
-                        ProgressView()
-                    } else {
-                        Text("Connect Gmail")
-                    }
-                }
-                .disabled(isConnecting)
-                if let authMessage {
-                    Text(authMessage)
-                        .font(.footnote)
-                        .foregroundStyle(.secondary)
-                }
-            }
-        } header: {
-            Text("Workout import")
-        } footer: {
-            Text("WorkoutTracker reads only your TrueCoach workout emails (from swoletron@truecoach.co) to import the day's workout. Requested scope: gmail.readonly. Sign-in happens in Google's own screen — your Google password never touches this app.")
-        }
-    }
-
-    private func connect() {
-        isConnecting = true
-        authMessage = nil
-        Task {
-            do {
-                try await googleAuth.signIn()
-                authMessage = "Connected. Pull today's workout from the Today tab."
-            } catch {
-                authMessage = error.localizedDescription
-            }
-            isConnecting = false
-        }
-    }
-
-    /// Import the last 30 days of workout emails so "last weight"
-    /// suggestions work from day one.
-    private func backfill() {
-        isBackfilling = true
-        backfillMessage = nil
-        Task {
-            do {
-                let since = Calendar.current.date(byAdding: .day, value: -30, to: Date()) ?? Date()
-                let workouts = try await ServiceFactory.makeService().fetchWorkouts(since: since)
-                for workout in workouts {
-                    WorkoutImporter.importWorkout(workout, into: context)
-                }
-                backfillMessage = workouts.isEmpty
-                    ? "No workout emails found in the last 30 days."
-                    : "Imported \(workouts.count) workout\(workouts.count == 1 ? "" : "s")."
-            } catch {
-                backfillMessage = error.localizedDescription
-            }
-            isBackfilling = false
         }
     }
 

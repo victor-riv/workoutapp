@@ -1,169 +1,251 @@
 import SwiftUI
 import SwiftData
 
-/// The home tab: today's programmed workout, imported from the coach's
-/// TrueCoach email via Gmail. The user only fills in weights — everything
-/// else is pre-populated.
+/// The home tab, redesigned: today's date up top, a month grid of
+/// workout dots, and the day's exercises as bold cards. Paste-first —
+/// no email wording anywhere.
 struct TodayWorkoutView: View {
     @Environment(\.modelContext) private var context
     @Query(sort: \WorkoutDay.date, order: .reverse) private var days: [WorkoutDay]
 
-    @State private var isImporting = false
-    @State private var importError: String?
-    @State private var showingImportError = false
     @State private var showingPaste = false
+    @State private var showingDeleteConfirm = false
 
     private var today: WorkoutDay? {
         days.first { Calendar.current.isDateInToday($0.date) }
     }
 
+    private var monthMarkedDays: Set<Int> {
+        let calendar = Calendar.current
+        return Set(
+            days
+                .filter { calendar.isDate($0.date, equalTo: Date(), toGranularity: .month) }
+                .map { calendar.component(.day, from: $0.date) }
+        )
+    }
+
+    private var daysInMonth: Int {
+        Calendar.current.range(of: .day, in: .month, for: Date())?.count ?? 30
+    }
+
+    private var weekdayText: String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "EEEE"
+        return formatter.string(from: Date()).uppercased()
+    }
+
+    private var monthDayText: String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "MMMM d"
+        return formatter.string(from: Date()).uppercased()
+    }
+
     var body: some View {
         NavigationStack {
-            Group {
-                if let day = today {
-                    workoutList(day)
-                } else {
-                    emptyState
-                }
-            }
-            .navigationTitle("Today")
-            .toolbar {
-                ToolbarItem(placement: .primaryAction) {
-                    Button(action: importToday) {
-                        if isImporting {
-                            ProgressView()
+            ZStack {
+                WorkoutTheme.background.ignoresSafeArea()
+                ScrollView {
+                    VStack(alignment: .leading, spacing: 22) {
+                        headerRow
+                        monthSection
+                        if let day = today {
+                            workoutSection(day)
                         } else {
-                            Label("Import", systemImage: "arrow.down.circle")
+                            emptySection
                         }
                     }
-                    .disabled(isImporting)
+                    .padding(.horizontal, 20)
+                    .padding(.vertical, 8)
                 }
             }
-            .alert("Import failed", isPresented: $showingImportError) {
-                Button("OK", role: .cancel) {}
-            } message: {
-                Text(importError ?? "Unknown error.")
-            }
+            .workoutTabStyle()
+            .toolbar(.hidden, for: .navigationBar)
             .sheet(isPresented: $showingPaste) {
                 PasteWorkoutView()
             }
-        }
-    }
-
-    // MARK: - Workout list
-
-    private func workoutList(_ day: WorkoutDay) -> some View {
-        List {
-            Section {
-                VStack(alignment: .leading, spacing: 4) {
-                    Text(day.title)
-                        .font(.title2.bold())
-                    Text("\(day.completedSetsCount) of \(day.totalSetsCount) sets done")
-                        .font(.subheadline)
-                        .foregroundStyle(.secondary)
-                }
-                .padding(.vertical, 4)
-            }
-
-            Section("Exercises") {
-                ForEach(day.sortedExercises) { workoutExercise in
-                    NavigationLink {
-                        ExerciseDetailView(workoutExercise: workoutExercise)
-                    } label: {
-                        ExerciseRowView(workoutExercise: workoutExercise)
+            .alert("Delete Workout?", isPresented: $showingDeleteConfirm) {
+                Button("Delete", role: .destructive) {
+                    if let day = today {
+                        context.delete(day)
                     }
                 }
+                Button("Cancel", role: .cancel) {}
+            } message: {
+                Text("This removes today's workout and every set you logged. This can't be undone.")
             }
         }
     }
 
-    private var emptyState: some View {
-        ContentUnavailableView {
-            Label("No workout yet", systemImage: "dumbbell")
-        } description: {
-            Text("Paste today's TrueCoach email and the app will parse it into a workout.")
-        } actions: {
-            Button("Paste workout email") {
+    // MARK: - Header
+
+    private var headerRow: some View {
+        HStack(alignment: .top) {
+            VStack(alignment: .leading, spacing: 0) {
+                Text(weekdayText)
+                    .font(.poster(42))
+                    .foregroundStyle(WorkoutTheme.cream)
+                    .tracking(-1)
+                Text(monthDayText)
+                    .font(.poster(42))
+                    .foregroundStyle(WorkoutTheme.cream)
+                    .tracking(-1)
+            }
+            Spacer()
+            Menu {
+                Button {
+                    showingPaste = true
+                } label: {
+                    Label("Paste Workout", systemImage: "doc.on.clipboard")
+                }
+                if today != nil {
+                    Button(role: .destructive) {
+                        showingDeleteConfirm = true
+                    } label: {
+                        Label("Delete Workout", systemImage: "trash")
+                    }
+                }
+            } label: {
+                Circle()
+                    .fill(WorkoutTheme.card)
+                    .frame(width: 56, height: 56)
+                    .overlay {
+                        Image(systemName: "dumbbell.fill")
+                            .foregroundStyle(WorkoutTheme.grayText)
+                            .font(.title3)
+                    }
+            }
+        }
+        .padding(.top, 12)
+    }
+
+    // MARK: - Month dots
+
+    private var monthSection: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            Text("\(monthMarkedDays.count)/\(daysInMonth) days")
+                .font(.title3.weight(.medium))
+                .foregroundStyle(.white)
+            MonthCalendarView(
+                month: Date(),
+                markedDays: monthMarkedDays,
+                showTodayRing: true
+            )
+        }
+    }
+
+    // MARK: - Workout
+
+    private func workoutSection(_ day: WorkoutDay) -> some View {
+        VStack(alignment: .leading, spacing: 12) {
+            VStack(alignment: .leading, spacing: 2) {
+                Text("Todays Workout")
+                    .font(.poster(28))
+                    .foregroundStyle(.white)
+                    .textCase(.uppercase)
+                    .tracking(-0.5)
+                Text("\(day.completedSetsCount) of \(day.totalSetsCount) sets done")
+                    .font(.subheadline)
+                    .foregroundStyle(WorkoutTheme.grayText)
+            }
+            ForEach(day.sortedExercises) { workoutExercise in
+                WorkoutExerciseCard(workoutExercise: workoutExercise)
+            }
+        }
+    }
+
+    // MARK: - Empty state
+
+    private var emptySection: some View {
+        VStack(alignment: .leading, spacing: 14) {
+            Text("Todays Workout")
+                .font(.poster(28))
+                .foregroundStyle(.white)
+                .textCase(.uppercase)
+                .tracking(-0.5)
+            Text("No workout yet. Paste today's workout to get started.")
+                .font(.body)
+                .foregroundStyle(WorkoutTheme.grayText)
+            Button {
                 showingPaste = true
+            } label: {
+                Text("Paste Workout")
             }
-            .buttonStyle(.borderedProminent)
-            Button(action: importToday) {
-                if isImporting {
-                    ProgressView()
-                } else {
-                    Text("Import from Gmail")
-                }
-            }
-            .buttonStyle(.bordered)
-            .disabled(isImporting)
+            .buttonStyle(.lime)
+            .padding(.top, 4)
         }
-    }
-
-    // MARK: - Import
-
-    private func importToday() {
-        isImporting = true
-        Task {
-            do {
-                let service = ServiceFactory.makeService()
-                if let workout = try await service.fetchTodaysWorkout() {
-                    WorkoutImporter.importWorkout(workout, into: context)
-                } else {
-                    importError = ImportError.noWorkoutToday.localizedDescription
-                    showingImportError = true
-                }
-            } catch {
-                // ImportError.notSignedIn already reads
-                // "Connect your Gmail in Settings first."
-                importError = error.localizedDescription
-                showingImportError = true
-            }
-            isImporting = false
-        }
+        .padding(.top, 8)
     }
 }
 
-/// One row in the workout list: name, prescription, and the last-weight chip.
-private struct ExerciseRowView: View {
+/// One exercise as a dark card: body-part emoji tile, name, muscle group,
+/// prescription, and a chevron into the logging page.
+private struct WorkoutExerciseCard: View {
     @Environment(\.modelContext) private var context
     let workoutExercise: WorkoutExercise
 
     @State private var suggestion: WeightSuggestion?
 
-    var body: some View {
-        VStack(alignment: .leading, spacing: 4) {
-            Text(workoutExercise.exercise?.name ?? "Exercise")
-                .font(.headline)
-            HStack {
-                Text("\(workoutExercise.targetSets) × \(workoutExercise.targetReps)")
-                    .font(.subheadline)
-                    .foregroundStyle(.secondary)
-                if let suggestion {
-                    Text("Last: \(formatWeight(suggestion.weight)) \(suggestion.unit.rawValue)")
-                        .font(.subheadline)
-                        .padding(.horizontal, 8)
-                        .padding(.vertical, 2)
-                        .background(.blue.opacity(0.12))
-                        .clipShape(Capsule())
-                }
-            }
-            let done = workoutExercise.sets.filter(\.isCompleted).count
-            if done > 0 {
-                Text("\(done)/\(workoutExercise.sets.count) sets logged")
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-            }
+    private var bodyPart: BodyPart {
+        BodyPart.detect(
+            name: workoutExercise.exercise?.name ?? "",
+            notes: workoutExercise.coachNotes
+        )
+    }
+
+    private var summaryLine: String {
+        var line = "\(workoutExercise.targetSets) sets X \(workoutExercise.targetReps) reps"
+        let weight = suggestion?.weight ?? workoutExercise.prescribedWeight
+        if let weight {
+            line += " X \(String(format: "%g", weight)) lbs"
         }
-        .padding(.vertical, 2)
+        return line
+    }
+
+    var body: some View {
+        NavigationLink {
+            ExerciseDetailView(workoutExercise: workoutExercise)
+        } label: {
+            HStack(spacing: 14) {
+                RoundedRectangle(cornerRadius: 16)
+                    .fill(WorkoutTheme.tile)
+                    .frame(width: 64, height: 64)
+                    .overlay {
+                        Text(bodyPart.emoji)
+                            .font(.system(size: 30))
+                    }
+                VStack(alignment: .leading, spacing: 4) {
+                    Text(workoutExercise.exercise?.name ?? "Exercise")
+                        .font(.system(size: 18, weight: .black))
+                        .foregroundStyle(.white)
+                        .textCase(.uppercase)
+                        .lineLimit(2)
+                    Text(bodyPart.label)
+                        .font(.subheadline)
+                        .foregroundStyle(WorkoutTheme.grayText)
+                    Text(summaryLine)
+                        .font(.subheadline)
+                        .foregroundStyle(WorkoutTheme.softText)
+                }
+                Spacer(minLength: 8)
+                Circle()
+                    .fill(Color(white: 0.06))
+                    .frame(width: 44, height: 44)
+                    .overlay {
+                        Image(systemName: "chevron.right")
+                            .foregroundStyle(WorkoutTheme.cream)
+                            .font(.headline.weight(.bold))
+                    }
+            }
+            .padding(12)
+            .background(WorkoutTheme.card)
+            .clipShape(RoundedRectangle(cornerRadius: 20))
+        }
+        .buttonStyle(.plain)
         .task {
             if let name = workoutExercise.exercise?.normalizedName {
                 suggestion = WeightSuggestionService.suggestion(for: name, in: context)
             }
         }
-    }
-
-    private func formatWeight(_ weight: Double) -> String {
-        String(format: "%g", weight)
     }
 }
 

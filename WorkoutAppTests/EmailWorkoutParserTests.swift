@@ -250,6 +250,7 @@ final class EmailWorkoutParserTests: XCTestCase {
         ])
 
         // Spot-check the interesting blocks.
+        guard exercises.count == 8 else { return }
         XCTAssertEqual(exercises[0].kind, .assessment)
         XCTAssertEqual(exercises[1].kind, .mobility)
         XCTAssertEqual(exercises[1].prescriptionLines.first?.reps, "5-10/movement")

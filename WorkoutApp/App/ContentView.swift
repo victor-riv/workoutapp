@@ -7,17 +7,16 @@ struct ContentView: View {
                 .tabItem {
                     Label("Today", systemImage: "dumbbell.fill")
                 }
-            NavigationStack {
-                PlateCalculatorView()
-            }
-            .tabItem {
-                Label("Plates", systemImage: "scalemass.fill")
-            }
+            HistoryView()
+                .tabItem {
+                    Label("History", systemImage: "calendar")
+                }
             SettingsView()
                 .tabItem {
                     Label("Settings", systemImage: "gearshape.fill")
                 }
         }
+        .tint(WorkoutTheme.lime)
     }
 }
 
