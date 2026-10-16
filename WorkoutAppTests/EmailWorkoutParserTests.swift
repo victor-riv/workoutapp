@@ -140,7 +140,12 @@ final class EmailWorkoutParserTests: XCTestCase {
         XCTAssertEqual(block?.targetSets, 3)
         XCTAssertEqual(block?.targetReps, "3")
         XCTAssertTrue(block?.coachNotes.contains("115 x 3") ?? false)
-        XCTAssertTrue(block?.coachNotes.contains("Also: 100 x 3 x 5") ?? false)
+        // The back-off line becomes its own wave of set rows, not a note.
+        XCTAssertFalse(block?.coachNotes.contains("Also:") ?? true)
+        XCTAssertEqual(block?.extraWaves.count, 1)
+        XCTAssertEqual(block?.extraWaves.first?.sets, 3)
+        XCTAssertEqual(block?.extraWaves.first?.reps, "5")
+        XCTAssertEqual(block?.extraWaves.first?.weight, 100)
     }
 
     // MARK: - Embedded names, sub-lines, supersets (W2D2 shape)

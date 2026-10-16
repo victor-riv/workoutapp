@@ -18,7 +18,19 @@ private let editingSourceID: String?
 @State private var activeImportMethod: ImportMethod?
 private enum ImportMethod { case paste, scan }
 struct BuilderExercise: Identifiable {
-let id = UUID(); var name: String; var targetSets: Int; var targetReps: String; var prescribedWeight: Double?; var coachNotes: String
+let id = UUID(); var name: String; var targetSets: Int; var targetReps: String; var prescribedWeight: Double?; var coachNotes: String; var extraWaves: [PrescriptionWave] = []
+/// "3 × 3 @ 120 lb · 3 × 5 @ 105 lb" when the coach programmed multiple waves.
+var wavesSummary: String? {
+guard !extraWaves.isEmpty else { return nil }
+func waveText(sets: Int, reps: String, weight: Double?) -> String {
+var text = "\(sets) × \(reps)"
+if let weight { text += " @ \(String(format: "%g", weight)) lb" }
+return text
+}
+var firstText = "\(targetSets) × \(targetReps)"
+if let prescribedWeight { firstText += " @ \(String(format: "%g", prescribedWeight)) lb" }
+return ([firstText] + extraWaves.map { waveText(sets: $0.sets, reps: $0.reps, weight: $0.weight) }).joined(separator: " · ")
+}
 }
 enum ExerciseSheetState: Identifiable {
 case add; case edit(BuilderExercise)
@@ -104,7 +116,7 @@ Button { exerciseSheet = .edit(exercise) } label: {
 HStack(spacing: 12) {
 VStack(alignment: .leading, spacing: 2) {
 Text(exercise.name).font(.headline).foregroundStyle(.white)
-Text("\(exercise.targetSets) x \(exercise.targetReps)").font(.caption).foregroundStyle(WorkoutTheme.grayText)
+Text(exercise.wavesSummary ?? "\(exercise.targetSets) x \(exercise.targetReps)").font(.caption).foregroundStyle(WorkoutTheme.grayText)
 }
 Spacer()
 Image(systemName: "chevron.right").font(.caption).foregroundStyle(WorkoutTheme.grayText)
@@ -121,7 +133,7 @@ if !exercises.isEmpty {
 Button(isEditing ? "Save Changes" : "Save Workout") { save() }.buttonStyle(.lime).frame(maxWidth: .infinity)
 }
 }
-.padding(.horizontal, 20).padding(.vertical, 12)
+.padding(.horizontal, 20).padding(.vertical, 12).padding(.bottom, 100)
 }
 }
 .toolbar {
@@ -180,7 +192,7 @@ let formatter = DateFormatter(); formatter.dateFormat = "yyyy-MM-dd"
 var imported = parsed.toImportedWorkout(messageID: "builder-\(formatter.string(from: selectedDate))")
 imported.date = selectedDate
 let newExercises = imported.blocks.map {
-BuilderExercise(name: $0.exerciseName, targetSets: $0.targetSets, targetReps: $0.targetReps, prescribedWeight: $0.prescribedWeight, coachNotes: $0.coachNotes)
+BuilderExercise(name: $0.exerciseName, targetSets: $0.targetSets, targetReps: $0.targetReps, prescribedWeight: $0.prescribedWeight, coachNotes: $0.coachNotes, extraWaves: $0.extraWaves)
 }
 exercises.append(contentsOf: newExercises); pastedText = ""
 withAnimation { showingPaste = false }
@@ -189,7 +201,7 @@ private func deleteExercises(at offsets: IndexSet) { exercises.remove(atOffsets:
 private func moveExercises(from source: IndexSet, to destination: Int) { exercises.move(fromOffsets: source, toOffset: destination) }
 private func save() {
 let blocks = exercises.map {
-ImportedBlock(exerciseName: $0.name, coachNotes: $0.coachNotes, targetSets: $0.targetSets, targetReps: $0.targetReps, prescribedWeight: $0.prescribedWeight)
+ImportedBlock(exerciseName: $0.name, coachNotes: $0.coachNotes, targetSets: $0.targetSets, targetReps: $0.targetReps, prescribedWeight: $0.prescribedWeight, extraWaves: $0.extraWaves)
 }
 let formatter = DateFormatter(); formatter.dateFormat = "yyyy-MM-dd"
 let dateString = formatter.string(from: selectedDate)
@@ -210,8 +222,10 @@ let onSave: (WorkoutBuilderView.BuilderExercise) -> Void
 @State private var repsText: String
 @State private var weightText: String
 @State private var notes: String
+private let extraWaves: [PrescriptionWave]
 init(exercise: WorkoutBuilderView.BuilderExercise? = nil, onSave: @escaping (WorkoutBuilderView.BuilderExercise) -> Void) {
 self.existing = exercise; self.onSave = onSave
+extraWaves = exercise?.extraWaves ?? []
 _name = State(initialValue: exercise?.name ?? "")
 _setsText = State(initialValue: exercise.map { String($0.targetSets) } ?? "3")
 _repsText = State(initialValue: exercise?.targetReps ?? "10")
@@ -292,10 +306,18 @@ Text("Weight (lb)").foregroundStyle(WorkoutTheme.softText); Spacer()
 TextField("Optional", text: $weightText).keyboardType(.decimalPad).multilineTextAlignment(.center).foregroundStyle(.white).frame(width: 100).padding(8).background(WorkoutTheme.tile).clipShape(RoundedRectangle(cornerRadius: 12))
 }.padding(.top, 12)
 TextField("Coach notes (optional)", text: $notes, axis: .vertical).foregroundStyle(.white).padding(14).background(WorkoutTheme.tile).clipShape(RoundedRectangle(cornerRadius: 12)).padding(.top, 12)
+if !extraWaves.isEmpty {
+VStack(alignment: .leading, spacing: 4) {
+Text("Additional sets").font(.caption).foregroundStyle(WorkoutTheme.grayText).textCase(.uppercase)
+ForEach(Array(extraWaves.enumerated()), id: \.offset) { _, wave in
+Text("\(wave.sets) × \(wave.reps)" + (wave.weight.map { " @ \(String(format: "%g", $0)) lb" } ?? "")).font(.subheadline).foregroundStyle(.white)
+}
+}.padding(14).background(WorkoutTheme.tile).clipShape(RoundedRectangle(cornerRadius: 12)).padding(.top, 12)
+}
 }
 .padding(16).background(WorkoutTheme.card).clipShape(RoundedRectangle(cornerRadius: 20))
 Button("Save Exercise") {
-let exercise = WorkoutBuilderView.BuilderExercise(name: name.trimmingCharacters(in: .whitespacesAndNewlines), targetSets: Int(setsText) ?? 3, targetReps: repsText.trimmingCharacters(in: .whitespacesAndNewlines), prescribedWeight: Double(weightText.replacingOccurrences(of: ",", with: ".")), coachNotes: notes.trimmingCharacters(in: .whitespacesAndNewlines))
+let exercise = WorkoutBuilderView.BuilderExercise(name: name.trimmingCharacters(in: .whitespacesAndNewlines), targetSets: Int(setsText) ?? 3, targetReps: repsText.trimmingCharacters(in: .whitespacesAndNewlines), prescribedWeight: Double(weightText.replacingOccurrences(of: ",", with: ".")), coachNotes: notes.trimmingCharacters(in: .whitespacesAndNewlines), extraWaves: extraWaves)
 onSave(exercise); dismiss()
 }.buttonStyle(.lime).disabled(!isValid).frame(maxWidth: .infinity)
 }

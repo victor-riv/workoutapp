@@ -37,4 +37,28 @@ final class WorkoutDay {
     var totalSetsCount: Int {
         exercises.flatMap(\.sets).count
     }
+
+    /// True when every set has been checked off.
+    var allSetsDone: Bool {
+        let sets = exercises.flatMap(\.sets)
+        return !sets.isEmpty && sets.allSatisfy(\.isCompleted)
+    }
+
+    /// Marks the workout complete if every set is done.
+    /// Returns true if this call just completed it.
+    @discardableResult
+    func checkAutoComplete() -> Bool {
+        guard !isCompleted, allSetsDone else { return false }
+        isCompleted = true
+        return true
+    }
+
+    /// Total volume of working sets (weight × reps), in lb. For the finisher card.
+    var workingVolumeLb: Double {
+        exercises.flatMap(\.sets).reduce(0) { total, set in
+            guard !set.isWarmup, let weight = set.weight, let reps = set.reps else { return total }
+            let lb = set.unit == .kg ? weight * 2.20462 : weight
+            return total + lb * Double(reps)
+        }
+    }
 }

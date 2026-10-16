@@ -50,6 +50,10 @@ enum WorkoutImporter {
                 workoutExercise.coachNotes = block.coachNotes
                 workoutExercise.prescribedWeight = block.prescribedWeight
                 workoutExercise.kind = block.kind
+                workoutExercise.setWavesSummary = Self.wavesSummary(
+                    first: (sets: block.targetSets, reps: block.targetReps, weight: block.prescribedWeight),
+                    extra: block.extraWaves
+                )
             } else {
                 let exercise = findOrCreateExercise(named: block.exerciseName, in: context)
                 workoutExercise = WorkoutExercise(
@@ -59,7 +63,11 @@ enum WorkoutImporter {
                     coachNotes: block.coachNotes,
                     prescribedWeight: block.prescribedWeight,
                     kind: block.kind,
-                    exercise: exercise
+                    exercise: exercise,
+                    setWavesSummary: Self.wavesSummary(
+                        first: (sets: block.targetSets, reps: block.targetReps, weight: block.prescribedWeight),
+                        extra: block.extraWaves
+                    )
                 )
                 workoutExercise.workoutDay = day
                 context.insert(workoutExercise)
@@ -67,7 +75,7 @@ enum WorkoutImporter {
 
                 if block.kind == .lift {
                     // Pre-fill the set rows; the user only fills in weights.
-                    workoutExercise.ensureSets(unit: profile.unit)
+                    workoutExercise.ensureSets(unit: profile.unit, extraWaves: block.extraWaves)
                     seedWeights(into: workoutExercise, exercise: exercise, block: block, profile: profile, in: context)
                 }
             }
@@ -89,8 +97,28 @@ enum WorkoutImporter {
         return day
     }
 
-    /// Pre-fill empty set weights: last-used weight first, falling back to
-    /// the coach's prescribed weight when there's no history yet.
+    /// "3 × 3 @ 120 lb · 3 × 5 @ 105 lb" for multi-wave prescriptions.
+    /// Nil when there's only one wave (the header already shows "3 × 8").
+    private static func wavesSummary(
+        first: (sets: Int, reps: String, weight: Double?),
+        extra: [PrescriptionWave]
+    ) -> String? {
+        guard !extra.isEmpty else { return nil }
+        func waveText(sets: Int, reps: String, weight: Double?) -> String {
+            var text = "\(sets) × \(reps)"
+            if let weight {
+                text += " @ \(String(format: "%g", weight)) lb"
+            }
+            return text
+        }
+        let parts = [waveText(sets: first.sets, reps: first.reps, weight: first.weight)]
+            + extra.map { waveText(sets: $0.sets, reps: $0.reps, weight: $0.weight) }
+        return parts.joined(separator: " · ")
+    }
+
+    /// Pre-fill empty set weights from the coach's prescribed weight for
+    /// each wave, falling back to the heaviest logged weight when the coach
+    /// didn't specify one for that wave.
     private static func seedWeights(
         into workoutExercise: WorkoutExercise,
         exercise: Exercise,
@@ -98,17 +126,28 @@ enum WorkoutImporter {
         profile: GymProfile,
         in context: ModelContext
     ) {
-        if let suggestion = WeightSuggestionService.suggestion(for: exercise.normalizedName, in: context) {
-            for set in workoutExercise.sets where set.weight == nil {
-                set.weight = suggestion.weight
-                set.unit = suggestion.unit
-            }
-        } else if let prescribed = block.prescribedWeight {
-            // No history yet — the coach's programmed weight is the best
-            // starting point (email weights are in lb).
-            for set in workoutExercise.sets where set.weight == nil {
-                set.weight = prescribed
-                set.unit = profile.unit
+        let suggestion = WeightSuggestionService.suggestion(for: exercise.normalizedName, in: context)
+        let sorted = workoutExercise.sortedSets
+        // Wave boundaries: first wave, then each extra wave in order.
+        let waves: [(count: Int, weight: Double?)] =
+            [(block.targetSets, block.prescribedWeight)] +
+            block.extraWaves.map { ($0.sets, $0.weight) }
+
+        var index = 0
+        for wave in waves {
+            for _ in 0 ..< max(wave.count, 1) {
+                guard index < sorted.count else { break }
+                let set = sorted[index]
+                if set.weight == nil {
+                    if let waveWeight = wave.weight {
+                        set.weight = waveWeight
+                        set.unit = profile.unit
+                    } else if let suggestion {
+                        set.weight = suggestion.weight
+                        set.unit = suggestion.unit
+                    }
+                }
+                index += 1
             }
         }
     }

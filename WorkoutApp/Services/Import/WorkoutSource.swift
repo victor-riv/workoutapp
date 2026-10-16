@@ -11,6 +11,15 @@ enum ExerciseKind: String, Sendable, Codable {
 
 // MARK: - App-facing import model (source-agnostic)
 
+/// One wave of a prescription, e.g. the "105 x 3 x 5" back-off sets after
+/// a "120 x 3" top set. Each wave becomes its own set rows.
+struct PrescriptionWave: Sendable {
+    var sets: Int
+    var reps: String
+    /// Coach-prescribed weight in lb, nil when the line doesn't state one.
+    var weight: Double?
+}
+
 /// One exercise block ready to become a WorkoutExercise.
 struct ImportedBlock {
     var exerciseName: String
@@ -25,6 +34,9 @@ struct ImportedBlock {
     var supersetGroup: String?
     /// API-fallback only: TrueCoach block headers ("WARM UP", "METCON").
     var isCircuitHeader: Bool = false
+    /// Prescription lines beyond the first — back-off sets, drop sets, etc.
+    /// Each wave gets its own set rows instead of landing in the notes.
+    var extraWaves: [PrescriptionWave] = []
 }
 
 /// A full workout day ready to become a WorkoutDay.

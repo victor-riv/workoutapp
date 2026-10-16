@@ -12,6 +12,8 @@ enum WorkoutTheme {
     static let dotEmpty = Color(white: 0.17)
     /// Primary accent: workout days, CTAs.
     static let lime = Color(red: 0.70, green: 0.90, blue: 0.20)
+    /// Warm-up sets.
+    static let orange = Color(red: 1.0, green: 0.62, blue: 0.20)
     static let grayText = Color(white: 0.55)
     static let softText = Color(white: 0.78)
 }

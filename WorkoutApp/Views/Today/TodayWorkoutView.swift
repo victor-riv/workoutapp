@@ -14,6 +14,7 @@ struct TodayWorkoutView: View {
     @State private var builderInitialDate = Date()
     @State private var navigatingDay: WorkoutDay?
     @State private var showingDayDetail = false
+    @State private var celebratingDay: WorkoutDay?
 
     private var today: WorkoutDay? {
         days.first { Calendar.current.isDateInToday($0.date) }
@@ -23,7 +24,7 @@ struct TodayWorkoutView: View {
         let calendar = Calendar.current
         return Set(
             days
-                .filter { calendar.isDate($0.date, equalTo: Date(), toGranularity: .month) }
+                .filter { $0.isCompleted && calendar.isDate($0.date, equalTo: Date(), toGranularity: .month) }
                 .map { calendar.component(.day, from: $0.date) }
         )
     }
@@ -75,10 +76,29 @@ struct TodayWorkoutView: View {
                     }
                     .padding(.horizontal, 20)
                     .padding(.vertical, 8)
+                    .padding(.bottom, 100)
                 }
             }
             .workoutTabStyle()
             .toolbar(.hidden, for: .navigationBar)
+            .task {
+                // One-time backfill: workouts logged before the completion
+                // feature existed get marked complete if any set was logged
+                // that day, so they keep their calendar dots. Idempotent.
+                var changed = false
+                for day in days where !day.isCompleted && day.completedSetsCount > 0 {
+                    day.isCompleted = true
+                    changed = true
+                }
+                if changed { try? context.save() }
+            }
+            .overlay {
+                if let day = celebratingDay {
+                    WorkoutCompleteCelebration(day: day) {
+                        celebratingDay = nil
+                    }
+                }
+            }
             .sheet(isPresented: $showingBuilder) {
                 WorkoutBuilderView(initialDate: builderInitialDate)
             }
@@ -185,6 +205,40 @@ struct TodayWorkoutView: View {
             }
             ForEach(day.sortedExercises) { workoutExercise in
                 WorkoutExerciseCard(workoutExercise: workoutExercise)
+            }
+            if day.isCompleted {
+                Button {
+                    day.isCompleted = false
+                    try? context.save()
+                } label: {
+                    HStack {
+                        Image(systemName: "checkmark.circle.fill")
+                            .foregroundStyle(WorkoutTheme.lime)
+                        Text("Completed")
+                            .font(.headline)
+                            .foregroundStyle(.white)
+                        Spacer()
+                        Image(systemName: "arrow.uturn.backward")
+                            .foregroundStyle(WorkoutTheme.grayText)
+                    }
+                    .padding(16)
+                    .background(WorkoutTheme.card)
+                    .clipShape(RoundedRectangle(cornerRadius: 20))
+                }
+                .buttonStyle(.plain)
+            } else {
+                Button {
+                    day.isCompleted = true
+                    try? context.save()
+                    celebratingDay = day
+                } label: {
+                    HStack {
+                        Image(systemName: "flag.checkered")
+                        Text("Finish Workout")
+                    }
+                    .frame(maxWidth: .infinity)
+                }
+                .buttonStyle(.lime)
             }
         }
     }
@@ -295,4 +349,74 @@ private struct WorkoutExerciseCard: View {
             WorkoutSet.self,
             GymProfile.self,
         ], inMemory: true)
+}
+
+/// Full-screen "you did it" moment when a workout is marked complete.
+/// Shared by Today and the exercise detail page. Dismisses with one tap.
+struct WorkoutCompleteCelebration: View {
+    let day: WorkoutDay
+    let onDismiss: () -> Void
+
+    @State private var popped = false
+
+    private var volumeText: String {
+        let vol = day.workingVolumeLb
+        if vol >= 1000 {
+            return String(format: "%.1fK lb lifted", vol / 1000)
+        }
+        return String(format: "%.0f lb lifted", vol)
+    }
+
+    var body: some View {
+        ZStack {
+            Color.black.opacity(0.75)
+                .ignoresSafeArea()
+                .onTapGesture(perform: onDismiss)
+
+            VStack(spacing: 20) {
+                ZStack {
+                    Circle()
+                        .fill(WorkoutTheme.lime)
+                        .frame(width: 110, height: 110)
+                    Image(systemName: "checkmark")
+                        .font(.system(size: 52, weight: .black))
+                        .foregroundStyle(.black)
+                }
+                .scaleEffect(popped ? 1 : 0.4)
+                .opacity(popped ? 1 : 0)
+
+                Text("Workout Complete")
+                    .font(.poster(38))
+                    .foregroundStyle(WorkoutTheme.cream)
+                    .textCase(.uppercase)
+                    .tracking(-1)
+                    .multilineTextAlignment(.center)
+
+                Text("\(day.completedSetsCount) sets · \(volumeText)")
+                    .font(.headline)
+                    .foregroundStyle(.white)
+
+                Text(day.title)
+                    .font(.subheadline)
+                    .foregroundStyle(WorkoutTheme.grayText)
+                    .lineLimit(1)
+
+                Button(action: onDismiss) {
+                    Text("Nice")
+                        .frame(maxWidth: .infinity)
+                }
+                .buttonStyle(.lime)
+                .padding(.top, 8)
+            }
+            .padding(32)
+            .background(WorkoutTheme.card)
+            .clipShape(RoundedRectangle(cornerRadius: 28))
+            .padding(.horizontal, 40)
+        }
+        .onAppear {
+            withAnimation(.spring(response: 0.45, dampingFraction: 0.65)) {
+                popped = true
+            }
+        }
+    }
 }

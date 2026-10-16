@@ -8,7 +8,7 @@ struct HistoryView: View {
     @State private var visibleMonth: Date = Calendar.current.date(from: Calendar.current.dateComponents([.year, .month], from: Date())) ?? Date()
     @State private var selectedDay: Int?
     private var monthDays: [WorkoutDay] { days.filter { Calendar.current.isDate($0.date, equalTo: visibleMonth, toGranularity: .month) } }
-    private var markedDays: Set<Int> { Set(monthDays.map { Calendar.current.component(.day, from: $0.date) }) }
+    private var markedDays: Set<Int> { Set(monthDays.filter(\.isCompleted).map { Calendar.current.component(.day, from: $0.date) }) }
     private var selectedWorkout: WorkoutDay? {
         guard let selectedDay else { return nil }
         return monthDays.first { Calendar.current.component(.day, from: $0.date) == selectedDay }
@@ -37,7 +37,7 @@ struct HistoryView: View {
                         selectedDaySection
                         monthListSection
                     }
-                    .padding(.horizontal, 20).padding(.vertical, 8)
+                    .padding(.horizontal, 20).padding(.vertical, 8).padding(.bottom, 100)
                 }
             }
             .workoutTabStyle()
@@ -114,6 +114,12 @@ private struct HistoryWorkoutCard: View {
                 Text(dateText).font(.system(size: 16, weight: .black)).foregroundStyle(.white).tracking(-0.5)
                 Text(day.title).font(.subheadline).foregroundStyle(WorkoutTheme.grayText).lineLimit(1)
                 Text("\(day.completedSetsCount) of \(day.totalSetsCount) sets").font(.subheadline).foregroundStyle(WorkoutTheme.softText)
+                if day.isCompleted {
+                    HStack(spacing: 4) {
+                        Image(systemName: "checkmark.circle.fill").font(.caption)
+                        Text("Completed").font(.caption.weight(.semibold))
+                    }.foregroundStyle(WorkoutTheme.lime)
+                }
             }
             Spacer(minLength: 8)
             Circle().fill(Color(white: 0.06)).frame(width: 44, height: 44)

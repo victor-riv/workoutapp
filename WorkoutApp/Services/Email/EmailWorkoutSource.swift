@@ -109,9 +109,14 @@ extension ParsedWorkout {
             if !exercise.notes.isEmpty {
                 notes.append(exercise.notes.joined(separator: " · "))
             }
-            for extra in exercise.prescriptionLines.dropFirst() {
-                // Back-off sets etc. on their own lines ("100 x 3 x 5").
-                notes.append("Also: \(extra.rawText)")
+            // Extra prescription lines (back-off sets like "100 x 3 x 5")
+            // become their own set rows, not notes.
+            let extraWaves: [PrescriptionWave] = exercise.prescriptionLines.dropFirst().map { extra in
+                PrescriptionWave(
+                    sets: extra.sets ?? 3,
+                    reps: extra.reps.isEmpty ? "—" : extra.reps,
+                    weight: extra.weight
+                )
             }
             return ImportedBlock(
                 exerciseName: exercise.name,
@@ -120,7 +125,8 @@ extension ParsedWorkout {
                 targetReps: first.map(\.reps).flatMap { $0.isEmpty ? nil : $0 } ?? "—",
                 prescribedWeight: first?.weight,
                 kind: exercise.kind,
-                supersetGroup: exercise.supersetGroup
+                supersetGroup: exercise.supersetGroup,
+                extraWaves: extraWaves
             )
         }
 

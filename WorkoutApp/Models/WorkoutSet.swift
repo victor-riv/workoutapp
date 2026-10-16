@@ -12,6 +12,9 @@ final class WorkoutSet {
     var reps: Int?
     var isCompleted: Bool = false
 
+    /// Warm-up sets don't count toward volume stats or personal records.
+    var isWarmup: Bool = false
+
     /// "lb" or "kg" — the unit the weight was logged in.
     var unitRaw: String
 

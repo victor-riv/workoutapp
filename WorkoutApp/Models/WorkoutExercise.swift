@@ -19,6 +19,10 @@ final class WorkoutExercise {
     /// Non-lift blocks render as info and don't get set rows.
     var kindRaw: String
 
+    /// Human-readable prescription when the coach programmed multiple waves,
+    /// e.g. "3 × 3 @ 120 lb · 3 × 5 @ 105 lb". Nil for single-wave exercises.
+    var setWavesSummary: String?
+
     var exercise: Exercise?
     var workoutDay: WorkoutDay?
 
@@ -32,7 +36,8 @@ final class WorkoutExercise {
         coachNotes: String = "",
         prescribedWeight: Double? = nil,
         kind: ExerciseKind = .lift,
-        exercise: Exercise? = nil
+        exercise: Exercise? = nil,
+        setWavesSummary: String? = nil
     ) {
         self.order = order
         self.targetSets = targetSets
@@ -41,6 +46,7 @@ final class WorkoutExercise {
         self.prescribedWeight = prescribedWeight
         self.kindRaw = kind.rawValue
         self.exercise = exercise
+        self.setWavesSummary = setWavesSummary
     }
 
     var kind: ExerciseKind {
@@ -53,12 +59,21 @@ final class WorkoutExercise {
     }
 
     /// Pre-fill empty set rows from the prescription.
-    func ensureSets(unit: WeightUnit) {
+    /// Extra waves (back-off sets etc.) get their own rows after the first wave.
+    func ensureSets(unit: WeightUnit, extraWaves: [PrescriptionWave] = []) {
         guard sets.isEmpty else { return }
-        for number in 1 ... max(targetSets, 1) {
-            let set = WorkoutSet(setNumber: number, targetReps: targetReps, unit: unit)
-            set.workoutExercise = self
-            sets.append(set)
+        var number = 0
+        func addWave(sets count: Int, reps: String) {
+            for _ in 1 ... max(count, 1) {
+                number += 1
+                let set = WorkoutSet(setNumber: number, targetReps: reps, unit: unit)
+                set.workoutExercise = self
+                sets.append(set)
+            }
+        }
+        addWave(sets: targetSets, reps: targetReps)
+        for wave in extraWaves {
+            addWave(sets: wave.sets, reps: wave.reps)
         }
     }
 }

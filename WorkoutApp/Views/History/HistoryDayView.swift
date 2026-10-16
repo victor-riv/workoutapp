@@ -31,9 +31,41 @@ struct HistoryDayView: View {
                 }
                 .padding(.top, 8)
 
+                if day.isCompleted {
+                    Button {
+                        day.isCompleted = false
+                    } label: {
+                        HStack {
+                            Image(systemName: "checkmark.circle.fill")
+                                .foregroundStyle(WorkoutTheme.lime)
+                            Text("Completed")
+                                .font(.headline)
+                                .foregroundStyle(.white)
+                            Spacer()
+                            Image(systemName: "arrow.uturn.backward")
+                                .foregroundStyle(WorkoutTheme.grayText)
+                        }
+                        .padding(16)
+                        .background(WorkoutTheme.card)
+                        .clipShape(RoundedRectangle(cornerRadius: 20))
+                    }
+                    .buttonStyle(.plain)
+                } else {
+                    Button {
+                        day.isCompleted = true
+                    } label: {
+                        HStack {
+                            Image(systemName: "flag.checkered")
+                            Text("Finish Workout")
+                        }
+                        .frame(maxWidth: .infinity)
+                    }
+                    .buttonStyle(.lime)
+                }
+
                 ForEach(day.sortedExercises) { workoutExercise in
                     NavigationLink {
-                        ExerciseDetailView(workoutExercise: workoutExercise)
+                        ExerciseDetailView(workoutExercise: workoutExercise, isHistory: true)
                     } label: {
                         HistoryExerciseCard(workoutExercise: workoutExercise)
                     }
